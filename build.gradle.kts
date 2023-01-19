@@ -49,6 +49,11 @@ allprojects {
     version = actualVersion
     group = groupId
 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
     // for all gradle plugins:
     pluginManager.withPlugin("java-gradle-plugin") {
         apply(plugin = "com.gradle.plugin-publish")

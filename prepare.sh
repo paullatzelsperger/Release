@@ -1,23 +1,23 @@
 #!/bin/bash
 
 declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog")
-
-for component in "${components[@]}"
-do
-  if [ ! -z "$VERSION" ]
-  then
-    # replace the version into the gradle properties and settings, if they exist
-    if [ -e $component/gradle.properties ]
-    then
-        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/gradle.properties;
-    fi
-    if [ -e $component/settings.gradle.kts ]
-    then
-        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/settings.gradle.kts;
-    fi
-  fi
-  (cd $component; ./gradlew -Pskip.signing publishToMavenLocal)
-done
+#
+#for component in "${components[@]}"
+#do
+#  if [ ! -z "$VERSION" ]
+#  then
+#    # replace the version into the gradle properties and settings, if they exist
+#    if [ -e $component/gradle.properties ]
+#    then
+#        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/gradle.properties;
+#    fi
+#    if [ -e $component/settings.gradle.kts ]
+#    then
+#        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/settings.gradle.kts;
+#    fi
+#  fi
+#  (cd $component; ./gradlew -Pskip.signing build)
+#done
 
 cat << EOF > settings.gradle.kts
 rootProject.name = "connector"
@@ -80,7 +80,7 @@ dependencyResolutionManagement {
 
         }
         create("edc") {
-            version("edc", "0.0.1-SNAPSHOT")
+            version("edc", "$VERSION")
             library("util", "org.eclipse.edc", "util").versionRef("edc")
             library("boot", "org.eclipse.edc", "boot").versionRef("edc")
 
@@ -121,7 +121,9 @@ EOF
 for component in "${components[@]}"
 do
 #  echo "include(\"$component\")" >> settings.gradle.kts
-  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
+  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "rest-client" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
+
+  sed -i '/0.0.1-SNAPSHOT/d' $component/gradle.properties
 
   sed -i "s/project(\":core/project(\":$component:core/g" $(find $component -name "build.gradle.kts")
   sed -i "s/project(\":data-protocols/project(\":$component:data-protocols/g" $(find $component -name "build.gradle.kts")
@@ -130,3 +132,31 @@ do
   sed -i "s/project(\":spi/project(\":$component:spi/g" $(find $component -name "build.gradle.kts")
   sed -i "s/project(\":system-tests/project(\":$component:system-tests/g" $(find $component -name "build.gradle.kts")
 done
+
+cat << EOF >> Connector/build.gradle.kts
+
+dependencies {
+    runtimeOnly(":GradlePlugins")
+}
+EOF
+
+cat << EOF >> IdentityHub/build.gradle.kts
+
+dependencies {
+    runtimeOnly(":Connector")
+}
+EOF
+
+cat << EOF >> FederatedCatalog/build.gradle.kts
+
+dependencies {
+    runtimeOnly(":IdentityHub")
+}
+EOF
+
+cat << EOF >> RegistrationService/build.gradle.kts
+
+dependencies {
+    runtimeOnly(":IdentityHub")
+}
+EOF

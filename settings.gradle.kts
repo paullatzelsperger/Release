@@ -58,7 +58,7 @@ dependencyResolutionManagement {
 
         }
         create("edc") {
-            version("edc", "0.0.1-SNAPSHOT")
+            version("edc", "0.0.1-milestone-8-SNAPSHOT")
             library("util", "org.eclipse.edc", "util").versionRef("edc")
             library("boot", "org.eclipse.edc", "boot").versionRef("edc")
 
@@ -94,14 +94,14 @@ dependencyResolutionManagement {
     }
 }
 
-include(":GradlePlugins:plugins:module-names")
-include(":GradlePlugins:plugins:test-summary")
-include(":GradlePlugins:plugins:openapi-merger")
-include(":GradlePlugins:plugins:edc-build")
-include(":GradlePlugins:plugins:autodoc:autodoc-plugin")
-include(":GradlePlugins:plugins:autodoc:autodoc-processor")
-include(":GradlePlugins:runtime-metamodel")
-include(":GradlePlugins:version-catalog")
+include("plugins:module-names")
+include("plugins:test-summary")
+include("plugins:openapi-merger")
+include("plugins:edc-build")
+include("plugins:autodoc:autodoc-plugin")
+include("plugins:autodoc:autodoc-processor")
+include("runtime-metamodel")
+include("version-catalog")
 include(":Connector:core:common:connector-core")
 include(":Connector:core:common:boot")
 include(":Connector:core:common:jwt-core")
@@ -247,7 +247,7 @@ include(":IdentityHub:extensions:store:cosmos:identity-hub-store-cosmos")
 include(":IdentityHub:extensions:identity-hub-api")
 include(":IdentityHub:extensions:identity-hub-verifier-jwt")
 include(":IdentityHub:extensions:credentials:identity-hub-credentials-jwt")
-include(":IdentityHub:extensions:identity-hub-verifier-jwt")
+include("extensions:identity-hub-verifier-jwt")
 include(":RegistrationService:spi:participant-store-spi")
 include(":RegistrationService:spi:dataspace-authority-spi")
 include(":RegistrationService:extensions:registration-service")
