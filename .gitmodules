@@ -1,0 +1,15 @@
+[submodule "Connector"]
+	path = Connector
+	url = https://github.com/eclipse-edc/Connector
+[submodule "IdentityHub"]
+	path = IdentityHub
+	url = https://github.com/eclipse-edc/IdentityHub
+[submodule "RegistrationService"]
+	path = RegistrationService
+	url = https://github.com/eclipse-edc/RegistrationService
+[submodule "FederatedCatalog"]
+	path = FederatedCatalog
+	url = https://github.com/eclipse-edc/FederatedCatalog
+[submodule "GradlePlugins"]
+	path = GradlePlugins
+	url = https://github.com/eclipse-edc/GradlePlugins
