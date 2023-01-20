@@ -2,28 +2,15 @@
 
 declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog")
 
-for component in "${components[@]}"
-do
-  if [ ! -z "$VERSION" ]
+if [ ! -z "$VERSION" ]
   then
     # replace the version into the gradle properties and settings, if they exist
-    if [ -e $component/gradle.properties ]
-    then
-        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/gradle.properties;
-    fi
-    if [ -e $component/settings.gradle.kts ]
-    then
-        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/settings.gradle.kts;
-    fi
-  fi
-done
+    sed -i "s#defaultVersion=0.0.1-SNAPSHOT#defaultVersion=$VERSION#g" $(find . -name "gradle.properties")
+    sed -i "s#annotationProcessorVersion=0.0.1-SNAPSHOT#annotationProcessorVersion=$VERSION#g" $(find . -name "gradle.properties")
+    sed -i "s#metaModelVersion=0.0.1-SNAPSHOT#metaModelVersion=$VERSION#g" $(find . -name "gradle.properties")
 
-if [ ! -z "$VERSION" ]
-then
-  # replace the version into the gradle properties and settings, if they exist
-  sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" gradle.properties;
-  sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" settings.gradle.kts;
-fi
+    sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
+  fi
 
 cat << EOF > settings.gradle.kts
 rootProject.name = "connector"
