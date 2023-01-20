@@ -115,44 +115,6 @@ allprojects {
         mavenCentral()
     }
 
-//    afterEvaluate {
-//        // values needed for publishing
-//        val pluginsWebsiteUrl: String by project
-//        val pluginsDeveloperId: String by project
-//        val pluginsDeveloperName: String by project
-//        val pluginsDeveloperEmail: String by project
-//        val pluginsScmConnection: String by project
-//        val pluginsScmUrl: String by project
-//        publishing {
-//            publications.forEach { i ->
-//                val mp = (i as MavenPublication)
-//                mp.pom {
-//                    name.set(project.name)
-//                    description.set("edc :: ${project.name}")
-//                    url.set(pluginsWebsiteUrl)
-//
-//                    licenses {
-//                        license {
-//                            name.set("The Apache License, Version 2.0")
-//                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-//                        }
-//                        developers {
-//                            developer {
-//                                id.set(pluginsDeveloperId)
-//                                name.set(pluginsDeveloperName)
-//                                email.set(pluginsDeveloperEmail)
-//                            }
-//                        }
-//                        scm {
-//                            connection.set(pluginsScmConnection)
-//                            url.set(pluginsScmUrl)
-//                        }
-//                    }
-//                }
-////                println("\nset POM for: ${mp.groupId}:${mp.artifactId}:${mp.version}")
-//            }
-//        }
-//    }
 
     tasks.withType<Jar> {
         metaInf {

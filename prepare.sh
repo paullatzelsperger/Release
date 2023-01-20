@@ -1,23 +1,29 @@
 #!/bin/bash
 
 declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog")
-#
-#for component in "${components[@]}"
-#do
-#  if [ ! -z "$VERSION" ]
-#  then
-#    # replace the version into the gradle properties and settings, if they exist
-#    if [ -e $component/gradle.properties ]
-#    then
-#        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/gradle.properties;
-#    fi
-#    if [ -e $component/settings.gradle.kts ]
-#    then
-#        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/settings.gradle.kts;
-#    fi
-#  fi
-#  (cd $component; ./gradlew -Pskip.signing build)
-#done
+
+for component in "${components[@]}"
+do
+  if [ ! -z "$VERSION" ]
+  then
+    # replace the version into the gradle properties and settings, if they exist
+    if [ -e $component/gradle.properties ]
+    then
+        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/gradle.properties;
+    fi
+    if [ -e $component/settings.gradle.kts ]
+    then
+        sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $component/settings.gradle.kts;
+    fi
+  fi
+done
+
+if [ ! -z "$VERSION" ]
+then
+  # replace the version into the gradle properties and settings, if they exist
+  sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" gradle.properties;
+  sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" settings.gradle.kts;
+fi
 
 cat << EOF > settings.gradle.kts
 rootProject.name = "connector"
@@ -50,7 +56,7 @@ dependencyResolutionManagement {
             version("googleFindBugs", "3.0.2")
             version("openApiTools", "0.2.1")
             version("swaggerAnnotation", "1.5.22")
-
+            library("swagger-jaxrs", "io.swagger.core.v3", "swagger-jaxrs2-jakarta").version("2.1.13")
 
             library("picocli-core", "info.picocli", "picocli").versionRef("picocli")
             library("picocli-codegen", "info.picocli", "picocli-codegen").versionRef("picocli")
@@ -84,33 +90,69 @@ dependencyResolutionManagement {
             library("util", "org.eclipse.edc", "util").versionRef("edc")
             library("boot", "org.eclipse.edc", "boot").versionRef("edc")
 
+
+
+            // DPF modules
+            library("api-management", "org.eclipse.edc", "management-api").versionRef("edc")
+            library("api-management-config", "org.eclipse.edc", "management-api-configuration").versionRef("edc")
+            library("api-observability", "org.eclipse.edc", "api-observability").versionRef("edc")
+            library("config-filesystem", "org.eclipse.edc", "configuration-filesystem").versionRef("edc")
+            library("core-api", "org.eclipse.edc", "api-core").versionRef("edc")
+            library("core-connector", "org.eclipse.edc", "connector-core").versionRef("edc")
+            library("core-controlPlane", "org.eclipse.edc", "control-plane-core").versionRef("edc")
+            library("core-controlplane", "org.eclipse.edc", "control-plane-core").versionRef("edc")
+            library("core-identity-did", "org.eclipse.edc", "identity-did-core").versionRef("edc")
+            library("core-jersey", "org.eclipse.edc", "jersey-core").versionRef("edc")
+            library("core-jetty", "org.eclipse.edc", "jetty-core").versionRef("edc")
+            library("core-junit", "org.eclipse.edc", "junit").versionRef("edc")
+            library("core-micrometer", "org.eclipse.edc", "micrometer-core").versionRef("edc")
+            library("core-sql", "org.eclipse.edc", "sql-core").versionRef("edc")
+            library("core-stateMachine", "org.eclipse.edc", "state-machine").versionRef("edc")
+            library("dpf-framework", "org.eclipse.edc", "data-plane-framework").versionRef("edc")
+            library("dpf-selector-client", "org.eclipse.edc", "data-plane-selector-client").versionRef("edc")
+            library("dpf-selector-core", "org.eclipse.edc", "data-plane-selector-core").versionRef("edc")
+            library("dpf-selector-spi", "org.eclipse.edc", "data-plane-selector-spi").versionRef("edc")
+            library("dpf-transferclient", "org.eclipse.edc", "data-plane-transfer-client").versionRef("edc")
+            library("ext-azure-cosmos-core", "org.eclipse.edc", "azure-cosmos-core").versionRef("edc")
+            library("ext-azure-test", "org.eclipse.edc", "azure-test").versionRef("edc")
+            library("ext-configuration-filesystem", "org.eclipse.edc", "configuration-filesystem").versionRef("edc")
+            library("ext-http", "org.eclipse.edc", "http").versionRef("edc")
+            library("ext-identity-did-core", "org.eclipse.edc", "identity-did-core").versionRef("edc")
+            library("ext-identity-did-crypto", "org.eclipse.edc", "identity-did-crypto").versionRef("edc")
+            library("ext-identity-did-web", "org.eclipse.edc", "identity-did-web").versionRef("edc")
+            library("ext-jdklogger", "org.eclipse.edc", "monitor-jdk-logger").versionRef("edc")
+            library("ext-micrometer-jersey", "org.eclipse.edc", "jersey-micrometer").versionRef("edc")
+            library("ext-micrometer-jetty", "org.eclipse.edc", "jetty-micrometer").versionRef("edc")
+            library("ext-observability", "org.eclipse.edc", "api-observability").versionRef("edc")
+            library("ext-vault-azure", "org.eclipse.edc", "vault-azure").versionRef("edc")
+            library("ext-vault-filesystem", "org.eclipse.edc", "vault-filesystem").versionRef("edc")
+            library("iam-mock", "org.eclipse.edc", "iam-mock").versionRef("edc")
+            library("ids", "org.eclipse.edc", "ids").versionRef("edc")
+            library("junit", "org.eclipse.edc", "junit").versionRef("edc")
+            library("spi-catalog", "org.eclipse.edc", "catalog-spi").versionRef("edc")
             library("spi-core", "org.eclipse.edc", "core-spi").versionRef("edc")
+            library("spi-identity-did", "org.eclipse.edc", "identity-did-spi").versionRef("edc")
+            library("spi-ids", "org.eclipse.edc", "ids-spi").versionRef("edc")
             library("spi-policy-engine", "org.eclipse.edc", "policy-engine-spi").versionRef("edc")
             library("spi-transaction", "org.eclipse.edc", "transaction-spi").versionRef("edc")
             library("spi-transaction-datasource", "org.eclipse.edc", "transaction-datasource-spi").versionRef("edc")
-            library("spi-identity-did", "org.eclipse.edc", "identity-did-spi").versionRef("edc")
+            library("spi-web", "org.eclipse.edc", "web-spi").versionRef("edc")
 
-            library("core-connector", "org.eclipse.edc", "connector-core").versionRef("edc")
-            library("core-controlPlane", "org.eclipse.edc", "control-plane-core").versionRef("edc")
-            library("core-micrometer", "org.eclipse.edc", "micrometer-core").versionRef("edc")
-            library("core-api", "org.eclipse.edc", "api-core").versionRef("edc")
-            library("core-stateMachine", "org.eclipse.edc", "state-machine").versionRef("edc")
-            library("core-sql", "org.eclipse.edc", "sql-core").versionRef("edc")
-            library("core-junit", "org.eclipse.edc", "junit").versionRef("edc")
+            bundle(
+                "connector",
+                listOf("boot", "core-connector", "core-jersey", "core-controlplane", "api-observability")
+            )
 
-            library("ext-identity-did-crypto", "org.eclipse.edc", "identity-did-crypto").versionRef("edc")
-            library("ext-identity-did-core", "org.eclipse.edc", "identity-did-core").versionRef("edc")
-            library("ext-identity-did-web", "org.eclipse.edc", "identity-did-web").versionRef("edc")
-            library("ext-http", "org.eclipse.edc", "http").versionRef("edc")
-            library("ext-micrometer-jetty", "org.eclipse.edc", "jetty-micrometer").versionRef("edc")
-            library("ext-micrometer-jersey", "org.eclipse.edc", "jersey-micrometer").versionRef("edc")
-            library("ext-observability", "org.eclipse.edc", "api-observability").versionRef("edc")
-            library("ext-configuration-filesystem", "org.eclipse.edc", "configuration-filesystem").versionRef("edc")
-            library("ext-vault-filesystem", "org.eclipse.edc", "vault-filesystem").versionRef("edc")
-            library("ext-vault-azure", "org.eclipse.edc", "vault-azure").versionRef("edc")
-            library("ext-azure-cosmos-core", "org.eclipse.edc", "azure-cosmos-core").versionRef("edc")
-            library("ext-azure-test", "org.eclipse.edc", "azure-test").versionRef("edc")
-            library("ext-jdklogger", "org.eclipse.edc", "monitor-jdk-logger").versionRef("edc")
+            bundle(
+                "dpf",
+                listOf(
+                    "dpf-transferclient",
+                    "dpf-selector-client",
+                    "dpf-selector-spi",
+                    "dpf-selector-core",
+                    "dpf-framework"
+                )
+            )
 
         }
     }
@@ -121,7 +163,8 @@ EOF
 for component in "${components[@]}"
 do
 #  echo "include(\"$component\")" >> settings.gradle.kts
-  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "rest-client" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
+#  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
+  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
 
   sed -i '/0.0.1-SNAPSHOT/d' $component/gradle.properties
 
@@ -131,7 +174,18 @@ do
   sed -i "s/project(\":launchers/project(\":$component:launchers/g" $(find $component -name "build.gradle.kts")
   sed -i "s/project(\":spi/project(\":$component:spi/g" $(find $component -name "build.gradle.kts")
   sed -i "s/project(\":system-tests/project(\":$component:system-tests/g" $(find $component -name "build.gradle.kts")
+  sed -i "s/project(\":rest-client/project(\":$component:rest-client/g" $(find $component -name "build.gradle.kts")
+
+  rm -rf $component/system-tests
+  rm -rf $component/launcher
+  rm -rf $component/launchers
 done
+
+sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/rest-client/build.gradle.kts
+
+# remove the dependency plugin part in connector
+head -n -7 Connector/build.gradle.kts > connector_build
+mv connector_build Connector/build.gradle.kts
 
 cat << EOF >> Connector/build.gradle.kts
 

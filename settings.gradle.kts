@@ -27,10 +27,8 @@ dependencyResolutionManagement {
             version("picocli", "4.6.3")
             version("googleFindBugs", "3.0.2")
             version("openApiTools", "0.2.1")
-
-            library("swagger-jaxrs", "io.swagger.core.v3", "swagger-jaxrs2-jakarta").version("2.1.13")
             version("swaggerAnnotation", "1.5.22")
-
+            library("swagger-jaxrs", "io.swagger.core.v3", "swagger-jaxrs2-jakarta").version("2.1.13")
 
             library("picocli-core", "info.picocli", "picocli").versionRef("picocli")
             library("picocli-codegen", "info.picocli", "picocli-codegen").versionRef("picocli")
@@ -63,74 +61,71 @@ dependencyResolutionManagement {
             version("edc", "0.0.1-SNAPSHOT")
             library("util", "org.eclipse.edc", "util").versionRef("edc")
             library("boot", "org.eclipse.edc", "boot").versionRef("edc")
+
+
+
+            // DPF modules
+            library("api-management", "org.eclipse.edc", "management-api").versionRef("edc")
+            library("api-management-config", "org.eclipse.edc", "management-api-configuration").versionRef("edc")
+            library("api-observability", "org.eclipse.edc", "api-observability").versionRef("edc")
             library("config-filesystem", "org.eclipse.edc", "configuration-filesystem").versionRef("edc")
+            library("core-api", "org.eclipse.edc", "api-core").versionRef("edc")
+            library("core-connector", "org.eclipse.edc", "connector-core").versionRef("edc")
+            library("core-controlPlane", "org.eclipse.edc", "control-plane-core").versionRef("edc")
+            library("core-controlplane", "org.eclipse.edc", "control-plane-core").versionRef("edc")
+            library("core-identity-did", "org.eclipse.edc", "identity-did-core").versionRef("edc")
+            library("core-jersey", "org.eclipse.edc", "jersey-core").versionRef("edc")
+            library("core-jetty", "org.eclipse.edc", "jetty-core").versionRef("edc")
+            library("core-junit", "org.eclipse.edc", "junit").versionRef("edc")
+            library("core-micrometer", "org.eclipse.edc", "micrometer-core").versionRef("edc")
+            library("core-sql", "org.eclipse.edc", "sql-core").versionRef("edc")
+            library("core-stateMachine", "org.eclipse.edc", "state-machine").versionRef("edc")
+            library("dpf-framework", "org.eclipse.edc", "data-plane-framework").versionRef("edc")
+            library("dpf-selector-client", "org.eclipse.edc", "data-plane-selector-client").versionRef("edc")
+            library("dpf-selector-core", "org.eclipse.edc", "data-plane-selector-core").versionRef("edc")
+            library("dpf-selector-spi", "org.eclipse.edc", "data-plane-selector-spi").versionRef("edc")
+            library("dpf-transferclient", "org.eclipse.edc", "data-plane-transfer-client").versionRef("edc")
+            library("ext-azure-cosmos-core", "org.eclipse.edc", "azure-cosmos-core").versionRef("edc")
+            library("ext-azure-test", "org.eclipse.edc", "azure-test").versionRef("edc")
+            library("ext-configuration-filesystem", "org.eclipse.edc", "configuration-filesystem").versionRef("edc")
+            library("ext-http", "org.eclipse.edc", "http").versionRef("edc")
+            library("ext-identity-did-core", "org.eclipse.edc", "identity-did-core").versionRef("edc")
+            library("ext-identity-did-crypto", "org.eclipse.edc", "identity-did-crypto").versionRef("edc")
+            library("ext-identity-did-web", "org.eclipse.edc", "identity-did-web").versionRef("edc")
+            library("ext-jdklogger", "org.eclipse.edc", "monitor-jdk-logger").versionRef("edc")
+            library("ext-micrometer-jersey", "org.eclipse.edc", "jersey-micrometer").versionRef("edc")
+            library("ext-micrometer-jetty", "org.eclipse.edc", "jetty-micrometer").versionRef("edc")
+            library("ext-observability", "org.eclipse.edc", "api-observability").versionRef("edc")
+            library("ext-vault-azure", "org.eclipse.edc", "vault-azure").versionRef("edc")
+            library("ext-vault-filesystem", "org.eclipse.edc", "vault-filesystem").versionRef("edc")
+            library("iam-mock", "org.eclipse.edc", "iam-mock").versionRef("edc")
+            library("ids", "org.eclipse.edc", "ids").versionRef("edc")
             library("junit", "org.eclipse.edc", "junit").versionRef("edc")
-
-
+            library("spi-catalog", "org.eclipse.edc", "catalog-spi").versionRef("edc")
             library("spi-core", "org.eclipse.edc", "core-spi").versionRef("edc")
+            library("spi-identity-did", "org.eclipse.edc", "identity-did-spi").versionRef("edc")
+            library("spi-ids", "org.eclipse.edc", "ids-spi").versionRef("edc")
             library("spi-policy-engine", "org.eclipse.edc", "policy-engine-spi").versionRef("edc")
             library("spi-transaction", "org.eclipse.edc", "transaction-spi").versionRef("edc")
             library("spi-transaction-datasource", "org.eclipse.edc", "transaction-datasource-spi").versionRef("edc")
-            library("spi-identity-did", "org.eclipse.edc", "identity-did-spi").versionRef("edc")
-            library("spi-catalog", "org.eclipse.edc", "catalog-spi").versionRef("edc")
             library("spi-web", "org.eclipse.edc", "web-spi").versionRef("edc")
 
-            library("core-connector", "org.eclipse.edc", "connector-core").versionRef("edc")
-            library("core-controlPlane", "org.eclipse.edc", "control-plane-core").versionRef("edc")
-            library("core-micrometer", "org.eclipse.edc", "micrometer-core").versionRef("edc")
-            library("core-api", "org.eclipse.edc", "api-core").versionRef("edc")
-            library("core-identity-did", "org.eclipse.edc", "identity-did-core").versionRef("edc")
-            library("core-stateMachine", "org.eclipse.edc", "state-machine").versionRef("edc")
-            library("core-sql", "org.eclipse.edc", "sql-core").versionRef("edc")
-            library("core-junit", "org.eclipse.edc", "junit").versionRef("edc")
-            library("core-jetty", "org.eclipse.edc", "jetty-core").versionRef("edc")
-            library("core-jersey", "org.eclipse.edc", "jersey-core").versionRef("edc")
+            bundle(
+                "connector",
+                listOf("boot", "core-connector", "core-jersey", "core-controlplane", "api-observability")
+            )
 
-            library("ext-identity-did-crypto", "org.eclipse.edc", "identity-did-crypto").versionRef("edc")
-            library("ext-identity-did-core", "org.eclipse.edc", "identity-did-core").versionRef("edc")
-            library("ext-identity-did-web", "org.eclipse.edc", "identity-did-web").versionRef("edc")
-            library("ext-http", "org.eclipse.edc", "http").versionRef("edc")
-            library("ext-micrometer-jetty", "org.eclipse.edc", "jetty-micrometer").versionRef("edc")
-            library("ext-micrometer-jersey", "org.eclipse.edc", "jersey-micrometer").versionRef("edc")
-            library("ext-observability", "org.eclipse.edc", "api-observability").versionRef("edc")
-            library("ext-configuration-filesystem", "org.eclipse.edc", "configuration-filesystem").versionRef("edc")
-            library("ext-vault-filesystem", "org.eclipse.edc", "vault-filesystem").versionRef("edc")
-            library("ext-vault-azure", "org.eclipse.edc", "vault-azure").versionRef("edc")
-            library("ext-azure-cosmos-core", "org.eclipse.edc", "azure-cosmos-core").versionRef("edc")
-            library("ext-azure-test", "org.eclipse.edc", "azure-test").versionRef("edc")
-            library("ext-jdklogger", "org.eclipse.edc", "monitor-jdk-logger").versionRef("edc")
+            bundle(
+                "dpf",
+                listOf(
+                    "dpf-transferclient",
+                    "dpf-selector-client",
+                    "dpf-selector-spi",
+                    "dpf-selector-core",
+                    "dpf-framework"
+                )
+            )
 
-
-            library("api-management-config", "org.eclipse.edc", "management-api-configuration").versionRef("edc")
-            library("api-management", "org.eclipse.edc", "management-api").versionRef("edc")
-            library("api-observability", "org.eclipse.edc", "api-observability").versionRef("edc")
-            library("spi-ids", "org.eclipse.edc", "ids-spi").versionRef("edc")
-            library("ids", "org.eclipse.edc", "ids").versionRef("edc")
-            library("iam-mock", "org.eclipse.edc", "iam-mock").versionRef("edc")
-
-            // DPF modules
-            library("dpf-transferclient", "org.eclipse.edc", "data-plane-transfer-client").versionRef("edc")
-            library("dpf-selector-client", "org.eclipse.edc", "data-plane-selector-client").versionRef("edc")
-            library("dpf-selector-spi", "org.eclipse.edc", "data-plane-selector-spi").versionRef("edc")
-            library("dpf-selector-core", "org.eclipse.edc", "data-plane-selector-core").versionRef("edc")
-            library("dpf-framework", "org.eclipse.edc", "data-plane-framework").versionRef("edc")
-
-
-//            bundle(
-//                "connector",
-//                listOf("boot", "core-connector", "core-jersey", "core-controlplane", "api-observability")
-//            )
-//
-//            bundle(
-//                "dpf",
-//                listOf(
-//                    "dpf-transferclient",
-//                    "dpf-selector-client",
-//                    "dpf-selector-spi",
-//                    "dpf-selector-core",
-//                    "dpf-framework"
-//                )
-//            )
         }
     }
 }
@@ -248,7 +243,6 @@ include(":Connector:extensions:data-plane:data-plane-azure-data-factory")
 include(":Connector:extensions:data-plane:data-plane-http")
 include(":Connector:extensions:data-plane:data-plane-aws-s3")
 include(":Connector:extensions:data-plane:data-plane-google-storage")
-include(":Connector:extensions:data-plane:data-plane-integration-tests")
 include(":Connector:extensions:data-plane:store:sql:data-plane-store-sql")
 include(":Connector:extensions:data-plane:store:cosmos:data-plane-store-cosmos")
 include(":Connector:extensions:data-plane-selector:data-plane-selector-api")
@@ -294,6 +288,7 @@ include(":RegistrationService:spi:dataspace-authority-spi")
 include(":RegistrationService:extensions:registration-service")
 include(":RegistrationService:extensions:participant-verifier")
 include(":RegistrationService:extensions:registration-policy-gaiax-member")
+include(":RegistrationService:rest-client")
 include(":RegistrationService:extensions:store:sql:participant-store-sql")
 include(":RegistrationService:extensions:store:cosmos:participant-store-cosmos")
 include(":FederatedCatalog:core:federated-catalog")
