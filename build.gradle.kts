@@ -58,32 +58,32 @@ allprojects {
     pluginManager.withPlugin("java-gradle-plugin") {
         apply(plugin = "com.gradle.plugin-publish")
     }
-    if (!project.hasProperty("skip.signing")) {
-        apply(plugin = "signing")
-
-        //set the deploy-url only for java libraries
-        val deployUrl =
-            if (actualVersion.contains("SNAPSHOT")) "https://oss.sonatype.org/content/repositories/snapshots/"
-            else "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-        publishing {
-            repositories {
-                maven {
-                    name = "OSSRH"
-                    setUrl(deployUrl)
-                    credentials {
-                        username = System.getenv("OSSRH_USER") ?: return@credentials
-                        password = System.getenv("OSSRH_PASSWORD") ?: return@credentials
-                    }
-                }
-            }
-
-            signing {
-                useGpgCmd()
-                sign(publishing.publications)
-            }
-        }
-
-    }
+//    if (!project.hasProperty("skip.signing")) {
+//        apply(plugin = "signing")
+//
+//        //set the deploy-url only for java libraries
+//        val deployUrl =
+//            if (actualVersion.contains("SNAPSHOT")) "https://oss.sonatype.org/content/repositories/snapshots/"
+//            else "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+//        publishing {
+//            repositories {
+//                maven {
+//                    name = "OSSRH"
+//                    setUrl(deployUrl)
+//                    credentials {
+//                        username = System.getenv("OSSRH_USER") ?: return@credentials
+//                        password = System.getenv("OSSRH_PASSWORD") ?: return@credentials
+//                    }
+//                }
+//            }
+//
+//            signing {
+//                useGpgCmd()
+//                sign(publishing.publications)
+//            }
+//        }
+//
+//    }
     // for all java libs:
     pluginManager.withPlugin("java-library") {
 

@@ -127,7 +127,7 @@ dependencyResolutionManagement {
             library("ext-vault-azure", "org.eclipse.edc", "vault-azure").versionRef("edc")
             library("ext-vault-filesystem", "org.eclipse.edc", "vault-filesystem").versionRef("edc")
             library("iam-mock", "org.eclipse.edc", "iam-mock").versionRef("edc")
-            library("ids", "org.eclipse.edc", "ids").versionRef("edc")
+ //           library("ids", "org.eclipse.edc", "ids").versionRef("edc")
             library("junit", "org.eclipse.edc", "junit").versionRef("edc")
             library("spi-catalog", "org.eclipse.edc", "catalog-spi").versionRef("edc")
             library("spi-core", "org.eclipse.edc", "core-spi").versionRef("edc")
@@ -162,8 +162,6 @@ EOF
 
 for component in "${components[@]}"
 do
-#  echo "include(\"$component\")" >> settings.gradle.kts
-#  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
   cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
 
   sed -i '/0.0.1-SNAPSHOT/d' $component/gradle.properties
@@ -186,6 +184,11 @@ sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/Regis
 # remove the dependency plugin part in connector
 head -n -7 Connector/build.gradle.kts > connector_build
 mv connector_build Connector/build.gradle.kts
+
+# avoid duplicated rest-client folder
+mv RegistrationService/rest-client RegistrationService/registration-service-client
+sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" settings.gradle.kts
+sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" $(find . -name "build.gradle.kts")
 
 cat << EOF >> Connector/build.gradle.kts
 
