@@ -184,6 +184,7 @@ sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-ser
 # publish plugin needs to be removed from GradlePublish as it needs to stay in the root
 sed -i '162,173d' GradlePlugins/build.gradle.kts
 sed -i '116,153d' GradlePlugins/build.gradle.kts
+sed -i '36,61d' GradlePlugins/build.gradle.kts
 sed -i '/gradle-nexus.publish-plugin/d' GradlePlugins/build.gradle.kts
 
 cat << EOF >> Connector/build.gradle.kts
