@@ -152,6 +152,9 @@ then
   sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
 fi
 
+# fix edc-build reference
+sed -i "s#org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin#org.eclipse.edc:edc-build#g" $(find . -name "build.gradle.kts")
+
 # prebuild and publish packages, needed to permit the reference to versioned dependency (e.g. runtime-metamodel)
 versionProp=""
 if [ ! -z "$VERSION" ]
@@ -176,9 +179,6 @@ do
   rm -rf $component/launcher
   rm -rf $component/launchers
 done
-
-# fix edc-build reference
-sed -i "s#org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin#org.eclipse.edc:edc-build#g" $(find . -name "build.gradle.kts")
 
 # update the openapi path for registration service rest client generation
 sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/rest-client/build.gradle.kts
