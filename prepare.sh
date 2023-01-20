@@ -159,17 +159,7 @@ for component in "${components[@]}"
 do
   cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
 
-#  sed -i '/0.0.1-SNAPSHOT/d' $component/gradle.properties
-
   sed -i "s#project(\":#project(\":$component:#g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":core/project(\":$component:core/g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":data-protocols/project(\":$component:data-protocols/g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":extensions/project(\":$component:extensions/g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":launchers/project(\":$component:launchers/g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":spi/project(\":$component:spi/g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":system-tests/project(\":$component:system-tests/g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":rest-client/project(\":$component:rest-client/g" $(find $component -name "build.gradle.kts")
-#  sed -i "s/project(\":plugins/project(\":$component:plugins/g" $(find $component -name "build.gradle.kts")
 
   rm -rf $component/system-tests
   rm -rf $component/launcher
@@ -188,9 +178,9 @@ sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-ser
 sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" $(find . -name "build.gradle.kts")
 
 # publish plugin needs to be removed from GradlePublish as it needs to stay in the root
+sed -i '164,173d' GradlePlugins/build.gradle.kts
+sed -i '116,153d' GradlePlugins/build.gradle.kts
 sed -i '/gradle-nexus.publish-plugin/d' GradlePlugins/build.gradle.kts
-head -n -11 GradlePlugins/build.gradle.kts > plugins_build
-mv plugins_build GradlePlugins/build.gradle.kts
 
 cat << EOF >> Connector/build.gradle.kts
 
