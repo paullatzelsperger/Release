@@ -147,11 +147,19 @@ dependencyResolutionManagement {
 
 EOF
 
+
+# prebuild and publish packages, this is done to permit the correct dependency reference, they will be overrode by the following "all-in-one" publish
+for component in "${components[@]}"
+do
+  (cd $component; ./gradlew -Pskip.signing publishToMavenLocal)
+done
+
+
 for component in "${components[@]}"
 do
   cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
 
-  sed -i '/0.0.1-SNAPSHOT/d' $component/gradle.properties
+#  sed -i '/0.0.1-SNAPSHOT/d' $component/gradle.properties
 
   sed -i "s/project(\":core/project(\":$component:core/g" $(find $component -name "build.gradle.kts")
   sed -i "s/project(\":data-protocols/project(\":$component:data-protocols/g" $(find $component -name "build.gradle.kts")
@@ -180,27 +188,28 @@ sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-ser
 cat << EOF >> Connector/build.gradle.kts
 
 dependencies {
-    runtimeOnly(":GradlePlugins")
+    implementation(":GradlePlugins")
 }
 EOF
 
 cat << EOF >> IdentityHub/build.gradle.kts
 
 dependencies {
-    runtimeOnly(":Connector")
+    implementation(":Connector")
 }
 EOF
 
 cat << EOF >> FederatedCatalog/build.gradle.kts
 
 dependencies {
-    runtimeOnly(":IdentityHub")
+    implementation(":IdentityHub")
 }
 EOF
 
 cat << EOF >> RegistrationService/build.gradle.kts
 
 dependencies {
-    runtimeOnly(":IdentityHub")
+    implementation(":IdentityHub")
 }
 EOF
+
