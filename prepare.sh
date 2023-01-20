@@ -13,7 +13,7 @@ if [ ! -z "$VERSION" ]
   fi
 
 cat << EOF > settings.gradle.kts
-rootProject.name = "connector"
+rootProject.name = "edc"
 
 // this is needed to have access to snapshot builds of plugins
 pluginManagement {
