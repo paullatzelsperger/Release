@@ -141,19 +141,25 @@ EOF
 
 # if the version variable is set, set it in the various gradle.properties and settings.gradle.kts files, otherwise leave 0.0.1-SNAPSHOT
 if [ ! -z "$VERSION" ]
-  then
-    sed -i "s#defaultVersion=0.0.1-SNAPSHOT#defaultVersion=$VERSION#g" $(find . -name "gradle.properties")
-    sed -i "s#annotationProcessorVersion=0.0.1-SNAPSHOT#annotationProcessorVersion=$VERSION#g" $(find . -name "gradle.properties")
-    sed -i "s#metaModelVersion=0.0.1-SNAPSHOT#metaModelVersion=$VERSION#g" $(find . -name "gradle.properties")
+then
+  sed -i "s#defaultVersion=0.0.1-SNAPSHOT#defaultVersion=$VERSION#g" $(find . -name "gradle.properties")
+  sed -i "s#annotationProcessorVersion=0.0.1-SNAPSHOT#annotationProcessorVersion=$VERSION#g" $(find . -name "gradle.properties")
+  sed -i "s#metaModelVersion=0.0.1-SNAPSHOT#metaModelVersion=$VERSION#g" $(find . -name "gradle.properties")
 
-    sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
-  fi
+  sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
 
+  sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
+fi
 
 # prebuild and publish packages, needed to permit the reference to versioned dependency (e.g. runtime-metamodel)
+versionProp=""
+if [ ! -z "$VERSION" ]
+then
+  versionProp="-Pversion=$VERSION"
+fi
 for component in "${components[@]}"
 do
-  (cd $component; ./gradlew -Pskip.signing publishToMavenLocal)
+  (cd $component; ./gradlew -Pskip.signing ${versionProp} publishToMavenLocal)
 done
 
 for component in "${components[@]}"
