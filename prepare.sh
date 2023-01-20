@@ -178,7 +178,7 @@ do
 done
 
 # fix edc-build reference
-sed -i "/s#org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin#org.eclipse.edc:edc-build#g" $(find . -i "build.gradle.kts")
+sed -i "s#org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin#org.eclipse.edc:edc-build#g" $(find . -name "build.gradle.kts")
 
 # update the openapi path for registration service rest client generation
 sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/rest-client/build.gradle.kts
