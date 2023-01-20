@@ -169,8 +169,7 @@ done
 sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/rest-client/build.gradle.kts
 
 # remove the dependency plugin part in connector
-head -n -7 Connector/build.gradle.kts > connector_build
-mv connector_build Connector/build.gradle.kts
+sed -i '95,101d' Connector/build.gradle.kts
 
 # avoid duplicated rest-client folder
 mv RegistrationService/rest-client RegistrationService/registration-service-client
