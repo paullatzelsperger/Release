@@ -1,17 +1,9 @@
 #!/bin/bash
 
+# the components that need to be built
 declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog")
 
-if [ ! -z "$VERSION" ]
-  then
-    # replace the version into the gradle properties and settings, if they exist
-    sed -i "s#defaultVersion=0.0.1-SNAPSHOT#defaultVersion=$VERSION#g" $(find . -name "gradle.properties")
-    sed -i "s#annotationProcessorVersion=0.0.1-SNAPSHOT#annotationProcessorVersion=$VERSION#g" $(find . -name "gradle.properties")
-    sed -i "s#metaModelVersion=0.0.1-SNAPSHOT#metaModelVersion=$VERSION#g" $(find . -name "gradle.properties")
-
-    sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
-  fi
-
+# create the base settings.gradle.kts file containing the version catalogs
 cat << EOF > settings.gradle.kts
 rootProject.name = "edc"
 
@@ -147,25 +139,38 @@ dependencyResolutionManagement {
 
 EOF
 
+# if the version variable is set, set it in the various gradle.properties and settings.gradle.kts files, otherwise leave 0.0.1-SNAPSHOT
+if [ ! -z "$VERSION" ]
+  then
+    sed -i "s#defaultVersion=0.0.1-SNAPSHOT#defaultVersion=$VERSION#g" $(find . -name "gradle.properties")
+    sed -i "s#annotationProcessorVersion=0.0.1-SNAPSHOT#annotationProcessorVersion=$VERSION#g" $(find . -name "gradle.properties")
+    sed -i "s#metaModelVersion=0.0.1-SNAPSHOT#metaModelVersion=$VERSION#g" $(find . -name "gradle.properties")
 
-# prebuild and publish packages, this is done to permit the correct dependency reference, they will be overrode by the following "all-in-one" publish
+    sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
+  fi
+
+
+# prebuild and publish packages, needed to permit the reference to versioned dependency (e.g. runtime-metamodel)
 for component in "${components[@]}"
 do
   (cd $component; ./gradlew -Pskip.signing publishToMavenLocal)
 done
 
-
 for component in "${components[@]}"
 do
+  # copy all the component modules into the main settings, adding the component name in the front of it
   cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
 
+  # update all the dependency with the new project tree
   sed -i "s#project(\":#project(\":$component:#g" $(find $component -name "build.gradle.kts")
 
+  # remove unneeded stuff
   rm -rf $component/system-tests
   rm -rf $component/launcher
   rm -rf $component/launchers
 done
 
+# update the openapi path for registration service rest client generation
 sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/rest-client/build.gradle.kts
 
 # remove the dependency plugin part in connector
@@ -177,7 +182,7 @@ sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-ser
 sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" $(find . -name "build.gradle.kts")
 
 # publish plugin needs to be removed from GradlePublish as it needs to stay in the root
-sed -i '164,173d' GradlePlugins/build.gradle.kts
+sed -i '162,173d' GradlePlugins/build.gradle.kts
 sed -i '116,153d' GradlePlugins/build.gradle.kts
 sed -i '/gradle-nexus.publish-plugin/d' GradlePlugins/build.gradle.kts
 
