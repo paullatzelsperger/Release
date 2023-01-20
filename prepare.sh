@@ -147,13 +147,14 @@ then
   sed -i "s#annotationProcessorVersion=0.0.1-SNAPSHOT#annotationProcessorVersion=$VERSION#g" $(find . -name "gradle.properties")
   sed -i "s#metaModelVersion=0.0.1-SNAPSHOT#metaModelVersion=$VERSION#g" $(find . -name "gradle.properties")
 
-  sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
+#  commented as we'll use the default plugin published 0.0.1-SNAPSHOT
+#  sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
 
   sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
 fi
 
-# fix edc-build reference
-sed -i "s#org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin#org.eclipse.edc:edc-build#g" $(find . -name "build.gradle.kts")
+# fix edc-build reference -> what's the matter with the plugin groupid/artifactid?
+#sed -i "s#org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin#org.eclipse.edc:edc-build#g" $(find . -name "build.gradle.kts")
 
 # prebuild and publish packages, needed to permit the reference to versioned dependency (e.g. runtime-metamodel)
 versionProp=""
