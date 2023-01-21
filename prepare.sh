@@ -147,8 +147,7 @@ then
   sed -i "s#annotationProcessorVersion=0.0.1-SNAPSHOT#annotationProcessorVersion=$VERSION#g" $(find . -name "gradle.properties")
   sed -i "s#metaModelVersion=0.0.1-SNAPSHOT#metaModelVersion=$VERSION#g" $(find . -name "gradle.properties")
 
-#  commented as we'll use the default plugin published 0.0.1-SNAPSHOT
-#  sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
+  sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
 
   sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
 fi
@@ -164,6 +163,10 @@ then
 fi
 for component in "${components[@]}"
 do
+  # add mavenLocal() to the plugin management (this should be already in place)
+  sed -i '/.*gradlePluginPortal()/a mavenLocal()' $component/settings.gradle.kts
+
+  # publish artifacts to maven local
   (cd $component; ./gradlew -Pskip.signing ${versionProp} publishToMavenLocal)
 done
 
