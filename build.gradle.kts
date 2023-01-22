@@ -43,7 +43,7 @@ buildscript {
     }
 }
 
-allprojects {
+subprojects {
     apply(plugin = "org.eclipse.edc.edc-build")
     apply(plugin = "maven-publish")
     version = actualVersion

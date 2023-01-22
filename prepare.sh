@@ -150,6 +150,9 @@ then
   sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
 
   sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
+
+  # put version in the gradle.properties
+  sed -i ""
 fi
 
 # fix edc-build reference -> what's the matter with the plugin groupid/artifactid?
@@ -161,6 +164,7 @@ if [ ! -z "$VERSION" ]
 then
   versionProp="-Pversion=$VERSION"
 fi
+
 for component in "${components[@]}"
 do
   # add mavenLocal() to the plugin management (this should be already in place)
@@ -195,12 +199,13 @@ mv RegistrationService/rest-client RegistrationService/registration-service-clie
 sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" settings.gradle.kts
 sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" $(find . -name "build.gradle.kts")
 
-# publish plugin needs to be removed from GradlePublish as it needs to stay in the root
+# publish plugin needs to be removed from GradlePublish as it stays in the root
 sed -i '162,173d' GradlePlugins/build.gradle.kts
 sed -i '116,153d' GradlePlugins/build.gradle.kts
 sed -i '36,61d' GradlePlugins/build.gradle.kts
 sed -i '/gradle-nexus.publish-plugin/d' GradlePlugins/build.gradle.kts
 
+# not sure that the next part is needed
 cat << EOF >> Connector/build.gradle.kts
 
 dependencies {
