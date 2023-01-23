@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ve
 
 # the components that need to be built
 declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog")
@@ -172,8 +172,10 @@ do
   sed -i '/.*gradlePluginPortal()/a mavenLocal()' $component/settings.gradle.kts
 
   # publish artifacts to maven local
-  echo "Build and publish to local component $component"
-  (cd $component; ./gradlew -Pskip.signing "${versionProp}" publishToMavenLocal)
+  echo "Build and publish to maven local component $component"
+  cd "$component"
+  ./gradlew -Pskip.signing "${versionProp}" publishToMavenLocal
+  cd ..
 done
 
 for component in "${components[@]}"
