@@ -172,7 +172,8 @@ do
   sed -i '/.*gradlePluginPortal()/a mavenLocal()' $component/settings.gradle.kts
 
   # publish artifacts to maven local
-  (cd $component; ./gradlew -Pskip.signing ${versionProp} publishToMavenLocal)
+  echo "Build and publish to local component $component"
+  (cd $component; ./gradlew -Pskip.signing "${versionProp}" publishToMavenLocal)
 done
 
 for component in "${components[@]}"
