@@ -149,14 +149,15 @@ then
 
   sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
 
-  sed -i "s/0.0.1-SNAPSHOT/$VERSION/g" $(find . -name "settings.gradle.kts")
+  sed -i "s#0.0.1-SNAPSHOT#$VERSION/g" $(find . -name "settings.gradle.kts")
+  # sets version in GradlePlugins/DefaultDependencyConvention and in ConnectorServiceImpl (there should be a better way)
+  sed -i "s#0.0.1-SNAPSHOT#$VERSION#g" $(find . -name "*.java")
 
-  # put version in the gradle.properties
-  sed -i ""
+  # put version in the gradle.properties files
+  sed -i "$ a version=$VERSION" $(find . -name "gradle.properties")
+  # add maven local to plugin management
+  sed -i '/.*gradlePluginPortal()/a mavenLocal()' $component/settings.gradle.kts
 fi
-
-# fix edc-build reference -> what's the matter with the plugin groupid/artifactid?
-#sed -i "s#org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin#org.eclipse.edc:edc-build#g" $(find . -name "build.gradle.kts")
 
 # prebuild and publish packages, needed to permit the reference to versioned dependency (e.g. runtime-metamodel)
 versionProp=""

@@ -24,13 +24,8 @@ plugins {
 }
 
 val groupId: String by project
-val defaultVersion: String by project
-
-var actualVersion: String = (project.findProperty("version") ?: defaultVersion) as String
-if (actualVersion == "unspecified") {
-    actualVersion = defaultVersion
-}
-
+val version: String by project
+val actualVersion: String = version
 
 buildscript {
     repositories {
@@ -43,11 +38,12 @@ buildscript {
     }
 }
 
-subprojects {
+allprojects {
     apply(plugin = "org.eclipse.edc.edc-build")
     apply(plugin = "maven-publish")
     version = actualVersion
     group = groupId
+    println("PROJECTVER ${this.name}. Version $version")
 
     repositories {
         mavenLocal()
@@ -58,36 +54,9 @@ subprojects {
     pluginManager.withPlugin("java-gradle-plugin") {
         apply(plugin = "com.gradle.plugin-publish")
     }
-//    if (!project.hasProperty("skip.signing")) {
-//        apply(plugin = "signing")
-//
-//        //set the deploy-url only for java libraries
-//        val deployUrl =
-//            if (actualVersion.contains("SNAPSHOT")) "https://oss.sonatype.org/content/repositories/snapshots/"
-//            else "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-//        publishing {
-//            repositories {
-//                maven {
-//                    name = "OSSRH"
-//                    setUrl(deployUrl)
-//                    credentials {
-//                        username = System.getenv("OSSRH_USER") ?: return@credentials
-//                        password = System.getenv("OSSRH_PASSWORD") ?: return@credentials
-//                    }
-//                }
-//            }
-//
-//            signing {
-//                useGpgCmd()
-//                sign(publishing.publications)
-//            }
-//        }
-//
-//    }
+
     // for all java libs:
     pluginManager.withPlugin("java-library") {
-
-
         java {
             val javaVersion = 11
             toolchain {
@@ -103,18 +72,6 @@ subprojects {
         }
 
     }
-
-    tasks.withType<Test> {
-        useJUnitPlatform()
-        testLogging {
-            showStandardStreams = true
-        }
-    }
-
-    repositories {
-        mavenCentral()
-    }
-
 
     tasks.withType<Jar> {
         metaInf {
