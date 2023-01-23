@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # the components that need to be built
 declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog")
 
@@ -176,7 +178,7 @@ done
 for component in "${components[@]}"
 do
   # copy all the component modules into the main settings, adding the component name in the front of it
-  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed "s/\":/\":$component:/g" >> settings.gradle.kts
+  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed "s/\":/\":$component:/g" >> settings.gradle.kts
 
   # update all the dependency with the new project tree
   sed -i "s#project(\":#project(\":$component:#g" $(find $component -name "build.gradle.kts")
