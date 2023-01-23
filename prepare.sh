@@ -149,14 +149,12 @@ then
 
   sed -i "s#edcGradlePluginsVersion=0.0.1-SNAPSHOT#edcGradlePluginsVersion=$VERSION#g" $(find . -name "gradle.properties")
 
-  sed -i "s#0.0.1-SNAPSHOT#$VERSION/g" $(find . -name "settings.gradle.kts")
+  sed -i "s#0.0.1-SNAPSHOT#$VERSION#g" $(find . -name "settings.gradle.kts")
   # sets version in GradlePlugins/DefaultDependencyConvention and in ConnectorServiceImpl (there should be a better way)
   sed -i "s#0.0.1-SNAPSHOT#$VERSION#g" $(find . -name "*.java")
 
   # put version in the gradle.properties files
   sed -i "$ a version=$VERSION" $(find . -name "gradle.properties")
-  # add maven local to plugin management
-  sed -i '/.*gradlePluginPortal()/a mavenLocal()' $component/settings.gradle.kts
 fi
 
 # prebuild and publish packages, needed to permit the reference to versioned dependency (e.g. runtime-metamodel)
@@ -178,7 +176,7 @@ done
 for component in "${components[@]}"
 do
   # copy all the component modules into the main settings, adding the component name in the front of it
-  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed --expression "s/\":/\":$component:/g" >> settings.gradle.kts
+  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "client-cli" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed "s/\":/\":$component:/g" >> settings.gradle.kts
 
   # update all the dependency with the new project tree
   sed -i "s#project(\":#project(\":$component:#g" $(find $component -name "build.gradle.kts")
@@ -190,15 +188,10 @@ do
 done
 
 # update the openapi path for registration service rest client generation
-sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/rest-client/build.gradle.kts
+sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/registration-service-client/build.gradle.kts
 
 # remove the dependency plugin part in connector
 sed -i '95,101d' Connector/build.gradle.kts
-
-# avoid duplicated rest-client folder
-mv RegistrationService/rest-client RegistrationService/registration-service-client
-sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" settings.gradle.kts
-sed -i "s#:RegistrationService:rest-client#:RegistrationService:registration-service-client#g" $(find . -name "build.gradle.kts")
 
 # publish plugin needs to be removed from GradlePublish as it stays in the root
 sed -i '162,173d' GradlePlugins/build.gradle.kts
