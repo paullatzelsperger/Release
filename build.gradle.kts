@@ -26,6 +26,10 @@ plugins {
 val groupId: String by project
 val version: String by project
 val actualVersion: String = version
+val edcScmConnection: String by project
+val edcWebsiteUrl: String by project
+val edcScmUrl: String by project
+val javaVersion: String by project
 
 buildscript {
     repositories {
@@ -43,7 +47,6 @@ allprojects {
     apply(plugin = "maven-publish")
     version = actualVersion
     group = groupId
-    println("PROJECTVER ${this.name}. Version $version")
 
     repositories {
         mavenLocal()
@@ -71,6 +74,29 @@ allprojects {
             withSourcesJar()
         }
 
+    }
+
+    configure<org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension> {
+        versions {
+            projectVersion.set(actualVersion)
+            metaModel.set(actualVersion)
+
+        }
+        pom {
+            projectName.set(project.name)
+            description.set("edc :: ${project.name}")
+            projectUrl.set(edcWebsiteUrl)
+            scmConnection.set(edcScmConnection)
+            scmUrl.set(edcScmUrl)
+        }
+        swagger {
+            title.set((project.findProperty("apiTitle") ?: "EDC REST API") as String)
+            description =
+                (project.findProperty("apiDescription") ?: "EDC REST APIs - merged by OpenApiMerger") as String
+            outputFilename.set(project.name)
+            outputDirectory.set(file("${rootProject.projectDir.path}/resources/openapi/yaml"))
+        }
+        javaLanguageVersion.set(JavaLanguageVersion.of(javaVersion))
     }
 
     tasks.withType<Jar> {
