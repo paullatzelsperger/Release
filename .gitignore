@@ -7,3 +7,6 @@ FederatedCatalog/
 GradlePlugins/
 IdentityHub/
 RegistrationService/
+
+gradle.properties
+settings.gradle.kts

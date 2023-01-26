@@ -142,6 +142,30 @@ dependencyResolutionManagement {
 
 EOF
 
+
+# create gradle.properties file for the release
+cat << EOF > gradle.properties
+groupId=org.eclipse.edc
+javaVersion=11
+defaultVersion=$VERSION
+annotationProcessorVersion=$VERSION
+edcGradlePluginsVersion=$VERSION
+metaModelVersion=$VERSION
+edcDeveloperId=mspiekermann
+edcDeveloperName=Markus Spiekermann
+edcDeveloperEmail=markus.spiekermann@isst.fraunhofer.de
+edcScmConnection=scm:git:git@github.com:eclipse-edc/Connector.git
+edcWebsiteUrl=https://github.com/eclipse-edc/Connector.git
+edcScmUrl=https://github.com/eclipse-edc/Connector.git
+EOF
+
+# clone all the component repositories
+for component in "${components[@]}"
+do
+  rm -rf component
+  git clone "https://github.com/eclipse-edc/$component"
+done
+
 # if the version variable is set, set it in the various gradle.properties and settings.gradle.kts files, otherwise leave 0.0.1-SNAPSHOT
 if [ ! -z "$VERSION" ]
 then
