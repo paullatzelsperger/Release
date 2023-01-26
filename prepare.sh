@@ -217,7 +217,7 @@ do
 done
 
 # update the openapi path for registration service rest client generation
-sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" $(find RegistrationService -name "build.gradle.kts")
+sed -i "s#rootDir/resources/openapi/yaml/registration-service-api.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service-api.yaml#g" $(find RegistrationService -name "build.gradle.kts")
 
 # remove the dependency plugin part in connector
 sed -i '95,101d' Connector/build.gradle.kts
