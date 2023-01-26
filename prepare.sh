@@ -31,7 +31,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            from("org.eclipse.edc:edc-versions:0.0.1-SNAPSHOT")
+            from("org.eclipse.edc:edc-versions:$VERSION")
             // this is not part of the published EDC Version Catalog, so we'll just "amend" it
             library("dnsOverHttps", "com.squareup.okhttp3", "okhttp-dnsoverhttps").versionRef("okhttp")
             version("picocli", "4.6.3")
@@ -52,7 +52,7 @@ dependencyResolutionManagement {
 
         }
         create("identityHub") {
-            version("ih", "0.0.1-SNAPSHOT")
+            version("ih", "$VERSION")
             library("spi-core", "org.eclipse.edc", "identity-hub-spi").versionRef("ih")
             library("core", "org.eclipse.edc", "identity-hub").versionRef("ih")
             library("core-api", "org.eclipse.edc", "identity-hub-api").versionRef("ih")
@@ -71,8 +71,6 @@ dependencyResolutionManagement {
             version("edc", "$VERSION")
             library("util", "org.eclipse.edc", "util").versionRef("edc")
             library("boot", "org.eclipse.edc", "boot").versionRef("edc")
-
-
 
             // DPF modules
             library("api-management", "org.eclipse.edc", "management-api").versionRef("edc")
