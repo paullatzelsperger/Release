@@ -111,8 +111,10 @@ dependencyResolutionManagement {
             library("iam-mock", "org.eclipse.edc", "iam-mock").versionRef("edc")
  //           library("ids", "org.eclipse.edc", "ids").versionRef("edc")
             library("junit", "org.eclipse.edc", "junit").versionRef("edc")
+            library("spi-aggregate-service", "org.eclipse.edc", "aggregate-service-spi").versionRef("edc")
             library("spi-catalog", "org.eclipse.edc", "catalog-spi").versionRef("edc")
             library("spi-core", "org.eclipse.edc", "core-spi").versionRef("edc")
+            library("spi-http", "org.eclipse.edc", "http-spi").versionRef("edc")
             library("spi-identity-did", "org.eclipse.edc", "identity-did-spi").versionRef("edc")
             library("spi-ids", "org.eclipse.edc", "ids-spi").versionRef("edc")
             library("spi-policy-engine", "org.eclipse.edc", "policy-engine-spi").versionRef("edc")
@@ -183,7 +185,7 @@ then
   sed -i "$ a version=$VERSION" $(find . -name "gradle.properties")
 fi
 
-# prebuild and publish packages, needed to permit the reference to versioned dependency (e.g. runtime-metamodel)
+# prebuild and publish plugins and modules to local repository, this needed to permit the all-in-one publish later
 versionProp=""
 if [ ! -z "$VERSION" ]
 then
@@ -217,7 +219,7 @@ do
 done
 
 # update the openapi path for registration service rest client generation
-sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" RegistrationService/registration-service-client/build.gradle.kts
+sed -i "s#rootDir/resources/openapi/yaml/registration-service.yaml#rootDir/RegistrationService/resources/openapi/yaml/registration-service.yaml#g" $(find RegistrationService -name "build.gradle.kts")
 
 # remove the dependency plugin part in connector
 sed -i '95,101d' Connector/build.gradle.kts
