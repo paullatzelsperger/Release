@@ -1,16 +1,8 @@
-# Build everything
+# EDC Release
 
+This gradle project prepares the EDC for a full release
+
+## Run
 ```
 VERSION=<version number> ./prepare.sh
-```
-
-## Reset submodules
-```
-git submodule deinit -f .                                                   
-git submodule update --init
-```
-
-## Update submodules to the latest main commit ##
-```
-git submodule foreach git pull origin main
 ```
