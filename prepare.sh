@@ -162,7 +162,7 @@ EOF
 # clone all the component repositories
 for component in "${components[@]}"
 do
-  rm -rf component
+  rm -rf "$component"
   git clone "https://github.com/eclipse-edc/$component"
 done
 
