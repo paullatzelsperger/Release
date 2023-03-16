@@ -257,3 +257,5 @@ dependencies {
 }
 EOF
 
+# Gradle 8 is required for v8.x of the Shadow Plugin -> replace all occurrences
+grep -rlz "com.github.johnrengelman.shadow" --exclude prepare.sh | xargs sed -i 's/shadow") version "8.*"/shadow") version "7.1.2"/g'
