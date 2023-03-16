@@ -112,4 +112,9 @@ allprojects {
             from("${rootProject.projectDir.path}/LICENSE")
         }
     }
+
+    val signingTasks: TaskCollection<Sign> = tasks.withType()
+    tasks.withType<PublishToMavenRepository>().configureEach{
+        mustRunAfter(signingTasks)
+    }
 }
