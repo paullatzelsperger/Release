@@ -30,9 +30,6 @@ dependencyResolutionManagement {
         mavenLocal()
     }
     versionCatalogs {
-        create("root") {
-          from("org.eclipse.edc:edc-versions:$VERSION")
-        }
         create("gradleplugins") {
           from("org.eclipse.edc:edc-versions:$VERSION")
         }
