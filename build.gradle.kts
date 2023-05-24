@@ -49,14 +49,13 @@ allprojects {
     // for all java libs:
     pluginManager.withPlugin("java-library") {
         java {
-            val javaVersion = 11
             toolchain {
                 languageVersion.set(JavaLanguageVersion.of(javaVersion))
             }
             tasks.withType(JavaCompile::class.java) {
                 // making sure the code does not use any APIs from a more recent version.
                 // Ref: https://docs.gradle.org/current/userguide/building_java_projects.html#sec:java_cross_compilation
-                options.release.set(javaVersion)
+                options.release.set(javaVersion.toInt())
             }
             withJavadocJar()
             withSourcesJar()
@@ -68,9 +67,6 @@ allprojects {
             metaModel.set(metaModelVersion)
         }
         pom {
-            projectName.set(project.name)
-            description.set("edc :: ${project.name}")
-            projectUrl.set(edcWebsiteUrl)
             scmConnection.set(edcScmConnection)
             scmUrl.set(edcScmUrl)
         }
@@ -81,7 +77,6 @@ allprojects {
             outputFilename.set(project.name)
             outputDirectory.set(file("${rootProject.projectDir.path}/resources/openapi/yaml"))
         }
-        javaLanguageVersion.set(JavaLanguageVersion.of(javaVersion))
     }
 
     // configure which version of the annotation processor to use. defaults to the same version as the plugin

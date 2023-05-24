@@ -55,7 +55,7 @@ EOF
 cat << EOF > gradle.properties
 group=org.eclipse.edc
 version=$VERSION
-javaVersion=11
+javaVersion=17
 annotationProcessorVersion=$VERSION
 edcGradlePluginsVersion=$VERSION
 metaModelVersion=$VERSION
