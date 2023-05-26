@@ -127,3 +127,7 @@ do
   rm -rf $component/launcher
   rm -rf $component/launchers
 done
+
+# print all versions
+grep -inHR "johnrengelman" .
+grep -inHR "distributionUrl=" .
