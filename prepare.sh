@@ -75,13 +75,16 @@ do
 done
 
 # if the version variable is set, set it in the various gradle.properties and settings.gradle.kts files, otherwise leave 0.0.1-SNAPSHOT
-if [ ! -z "$VERSION" ]
+# if the version variable is set, set it in the various gradle.properties and settings.gradle.kts files, otherwise leave the old version
+if [ -n "$VERSION" ]
 then
-  sed -i "s#0.0.1-SNAPSHOT#$VERSION#g" $(find . -name "gradle.properties")
-  sed -i "s#0.0.1-SNAPSHOT#$VERSION#g" $(find . -name "settings.gradle.kts")
-  sed -i "s#0.0.1-SNAPSHOT#$VERSION#g" $(find . -name "libs.versions.toml")
+  # read the old version from the Connector's gradle.properties
+  oldVersion=$(grep "version" Connector/gradle.properties  | awk -F= '{print $2}')
+  sed -i "s#$oldVersion#$VERSION#g" $(find . -name "gradle.properties")
+  sed -i "s#$oldVersion#$VERSION#g" $(find . -name "settings.gradle.kts")
+  sed -i "s#$oldVersion#$VERSION#g" $(find . -name "libs.versions.toml")
   # sets version in GradlePlugins/DefaultDependencyConvention and in ConnectorServiceImpl (there should be a better way)
-  sed -i "s#0.0.1-SNAPSHOT#$VERSION#g" $(find . -name "*.java")
+  sed -i "s#$oldVersion#$VERSION#g" $(find . -name "*.java")
 fi
 
 # prebuild and publish plugins and modules to local repository, this needed to permit the all-in-one publish later
