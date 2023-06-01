@@ -2,6 +2,15 @@
 
 set -ve
 
+# removes any dash, performs toLower
+toVersionCatalogName () {
+  replacement=""
+  input=$1
+  cleaned=$(echo "${input//-/"$replacement"}")
+  lower=$(echo "$cleaned" | tr '[:upper:]' '[:lower:]')
+  echo $lower
+}
+
 # the components that need to be built
 declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog" "Technology-Azure" "Technology-Aws" "Technology-Gcp")
 
@@ -45,13 +54,13 @@ dependencyResolutionManagement {
         create("federatedcatalog") {
           from("org.eclipse.edc:federated-catalog-versions:$VERSION")
         }
-        create("tech-azure") {
+        create("technologyazure") {
           from("org.eclipse.edc:technology-azure-versions:$VERSION")
         }
-        create("tech-aws") {
+        create("technologyaws") {
           from("org.eclipse.edc:technology-aws-versions:$VERSION")
         }
-        create("tech-gcp") {
+        create("technologygcp") {
           from("org.eclipse.edc:technology-gcp-versions:$VERSION")
         }
     }
@@ -130,7 +139,7 @@ do
   sed -i "s#project(\":#project(\":$component:#g" $(find $component -name "build.gradle.kts")
 
   # update all dependency with the new version catalog prefix
-  versionCatalogName=$(sed --expression 's/\([A-Z]\)/\L\1/g' <<< ${component})
+  versionCatalogName=$(toVersionCatalogName $component)
   sed -i "s#(libs\.#(${versionCatalogName}\.#g" $(find $component -name "build.gradle.kts")
 
   # remove unneeded stuff
