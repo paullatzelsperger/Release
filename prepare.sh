@@ -12,7 +12,7 @@ toVersionCatalogName () {
 }
 
 # the components that need to be built
-declare -a components=("GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog" "Technology-Azure" "Technology-Aws" "Technology-Gcp")
+declare -a components=("Runtime-Metamodel" "GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog" "Technology-Azure" "Technology-Aws" "Technology-Gcp")
 
 # create the base settings.gradle.kts file containing the version catalogs
 cat << EOF > settings.gradle.kts
@@ -62,6 +62,9 @@ dependencyResolutionManagement {
         }
         create("technologygcp") {
           from("org.eclipse.edc:technology-gcp-versions:$VERSION")
+        }
+        create("runtimemetamodel"){
+          from("org.eclipse.edc:runtime-metamodel-versions:$VERSION")
         }
     }
 }
