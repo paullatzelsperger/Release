@@ -10,6 +10,7 @@ RegistrationService/
 Technology-Azure/
 Technology-Aws/
 Technology-Gcp/
+Runtime-Metamodel/
 
 gradle.properties
 settings.gradle.kts

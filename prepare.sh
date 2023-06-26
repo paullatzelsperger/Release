@@ -150,3 +150,9 @@ do
   rm -rf $component/launcher
   rm -rf $component/launchers
 done
+
+
+## Swap out the build file without the nexus plugin, because the nexus plugin
+## gets applied at the root project level, otherwise it will throw an error.
+mv Runtime-Metamodel/build.gradle.kts Runtime-Metamodel/build.gradle.kts.bak
+mv Runtime-Metamodel/build.gradle.kts.release Runtime-Metamodel/build.gradle.kts
