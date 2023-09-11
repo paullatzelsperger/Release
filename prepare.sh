@@ -136,7 +136,7 @@ do
   sed -i "s#:version-catalog#:${component}-version-catalog-1#g" ${component}/settings.gradle.kts
 
   # copy all the component modules into the main settings, adding the component name in the front of it
-  cat $component/settings.gradle.kts | grep "include(" | grep -v "system-tests" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed "s/\":/\":$component:/g" >> settings.gradle.kts
+  cat $component/settings.gradle.kts | grep "include(" | grep -v "launcher" | grep -v "data-plane-integration-tests" | sed "s/\":/\":$component:/g" >> settings.gradle.kts
 
   # update all the dependency with the new project tree
   sed -i "s#project(\":#project(\":$component:#g" $(find $component -name "build.gradle.kts")
@@ -146,7 +146,6 @@ do
   sed -i "s#(libs\.#(${versionCatalogName}\.#g" $(find $component -name "build.gradle.kts")
 
   # remove unneeded stuff
-  rm -rf $component/system-tests
   rm -rf $component/launcher
   rm -rf $component/launchers
 done
