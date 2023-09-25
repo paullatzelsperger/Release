@@ -54,7 +54,7 @@ jobs:
   Run-All-Tests:
     name: "Run tests"
     runs-on: ubuntu-latest
-    needs: [Secrets-Presence, Determine-Version]
+    needs: [ Secrets-Presence, Determine-Version ]
     if: |
       needs.Secrets-Presence.outputs.HAS_GH_PAT
     strategy:
@@ -62,13 +62,13 @@ jobs:
       matrix:
         test-def: [ { owner: "${{ github.event.inputs.repo-owner }}", repo: "runtime-metamodel",    workflowfile: "ci.yaml" },
                     { owner: "${{ github.event.inputs.repo-owner }}", repo: "gradleplugins",        workflowfile: "test.yaml" },
-                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "connector",            workflowfile: "verify.yaml"},
-                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "identityhub",          workflowfile: "verify.yaml"},
-                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "registrationservice",  workflowfile: "verify.yaml"},
-                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "federatedcatalog",     workflowfile: "verify.yaml"},
-                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "technology-azure",     workflowfile: "verify.yaml"},
-                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "technology-aws",       workflowfile: "verify.yaml"},
-                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "technology-gcp",       workflowfile: "verify.yaml"} ]
+                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "connector",            workflowfile: "verify.yaml" },
+                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "identityhub",          workflowfile: "verify.yaml" },
+                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "registrationservice",  workflowfile: "verify.yaml" },
+                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "federatedcatalog",     workflowfile: "verify.yaml" },
+                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "technology-azure",     workflowfile: "verify.yaml" },
+                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "technology-aws",       workflowfile: "verify.yaml" },
+                    { owner: "${{ github.event.inputs.repo-owner }}", repo: "technology-gcp",       workflowfile: "verify.yaml" } ]
 
     steps:
       - uses: actions/checkout@v3
@@ -87,3 +87,16 @@ jobs:
     with:
       version: ${{ needs.Determine-Version.outputs.VERSION }}
     secrets: inherit
+
+  Post-To-Discord:
+    needs: [ Publish-components, Determine-Version ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sarisia/actions-status-discord@v1
+        name: "Invoke discord webhook"
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_GITHUB }}
+          title: "Nightly Build"
+          description: "Build and publish ${{ needs.Determine-Version.outputs.VERSION }}"
+          username: GitHub Actions
