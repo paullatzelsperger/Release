@@ -23,13 +23,15 @@ jobs:
     name: "Check for required credentials"
     runs-on: ubuntu-latest
     outputs:
-      HAS_GH_PAT: ${{ steps.secret-presence.outputs.HAS_GH_PAT }}
+      HAS_GH_PAT: ${{ steps.secrets-presence.outputs.HAS_GH_PAT }}
+      HAS_WEBHOOK: ${{ steps.secrets-presence.outputs.HAS_WEBHOOK }}
     steps:
       - name: Check whether secrets exist
-        id: secret-presence
+        id: secrets-presence
         run: |
           [ ! -z "${{ secrets.ORG_GITHUB_BOT_USER }}" ] &&
-          [ ! -z "${{ secrets.ORG_GITHUB_BOT_USER }}" ] && echo "HAS_GH_PAT=true" >> $GITHUB_OUTPUT
+          [ ! -z "${{ secrets.ORG_GITHUB_BOT_TOKEN }}" ] && echo "HAS_GH_PAT=true" >> $GITHUB_OUTPUT
+          [ ! -z "${{ secrets.DISCORD_WEBHOOK_GITHUB }}" ] && echo "HAS_WEBHOOK=true" >> $GITHUB_OUTPUT
           exit 0
   
   Determine-Version:
@@ -85,7 +87,9 @@ jobs:
     secrets: inherit
 
   Post-To-Discord:
-    needs: [ Publish-components, Determine-Version ]
+    needs: [ Publish-components, Determine-Version, Secrets-Presence ]
+    if: |
+      needs.Secrets-Presence.outputs.HAS_WEBHOOK
     runs-on: ubuntu-latest
     steps:
       - uses: sarisia/actions-status-discord@v1
