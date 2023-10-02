@@ -87,7 +87,7 @@ jobs:
     secrets: inherit
 
   Post-To-Discord:
-    needs: [ Publish-components, Determine-Version, Secrets-Presence ]
+    needs: [ Publish-Components, Determine-Version, Secrets-Presence ]
     if: "needs.Secrets-Presence.outputs.HAS_WEBHOOK && always()"
     runs-on: ubuntu-latest
     steps:
@@ -95,6 +95,8 @@ jobs:
         name: "Invoke discord webhook"
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_GITHUB }}
+          # if the publishing is skipped, that means the preceding test run failed
+          status: ${{ needs.Publish-Components.result == 'skipped' && 'Failure' || needs.Publish-Components.result }}
           title: "Nightly Build"
           description: "Build and publish ${{ needs.Determine-Version.outputs.VERSION }}"
           username: GitHub Actions
