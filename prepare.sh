@@ -12,7 +12,9 @@ toVersionCatalogName () {
 }
 
 # the components that need to be built
-declare -a components=("Runtime-Metamodel" "GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog" "Technology-Azure" "Technology-Aws" "Technology-Gcp")
+#declare -a components=("Runtime-Metamodel" "GradlePlugins" "Connector" "IdentityHub" "RegistrationService" "FederatedCatalog" "Technology-Azure" "Technology-Aws" "Technology-Gcp")
+# RegistrationService has been excluded because currently it can't work with the IATP implementation
+declare -a components=("Runtime-Metamodel" "GradlePlugins" "Connector" "IdentityHub" "FederatedCatalog" "Technology-Azure" "Technology-Aws" "Technology-Gcp")
 
 # create the base settings.gradle.kts file containing the version catalogs
 cat << EOF > settings.gradle.kts
@@ -48,9 +50,10 @@ dependencyResolutionManagement {
         create("identityhub") {
           from("org.eclipse.edc:identity-hub-versions:$VERSION")
         }
-        create("registrationservice") {
-          from("org.eclipse.edc:registration-service-versions:$VERSION")
-        }
+        // Commented because RegistrationService has been excluded from the build
+        // create("registrationservice") {
+        //   from("org.eclipse.edc:registration-service-versions:$VERSION")
+        // }
         create("federatedcatalog") {
           from("org.eclipse.edc:federated-catalog-versions:$VERSION")
         }
@@ -116,12 +119,6 @@ fi
 
 for component in "${components[@]}"
 do
-  # we're using gradle 7 in some components because of https://github.com/gradle-nexus/publish-plugin/issues/208
-  sed -i "s#shadow = .*#shadow = { id = \"com.github.johnrengelman.shadow\", version = \"7.1.2\" }#g" ${component}/gradle/libs.versions.toml
-
-  # make sure gradle 7.6 is used everywhere
-  grep -rlz "distributionUrl=" ${component} | xargs sed -i "s#gradle-8..*-bin.zip#gradle-7.6-bin.zip#g"
-
   # publish artifacts to maven local
   echo "Build and publish to maven local component $component"
   cd "$component"
