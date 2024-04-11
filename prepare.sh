@@ -82,7 +82,6 @@ version=$VERSION
 javaVersion=17
 annotationProcessorVersion=$VERSION
 edcGradlePluginsVersion=$VERSION
-metaModelVersion=$VERSION
 edcDeveloperId=mspiekermann
 edcDeveloperName=Markus Spiekermann
 edcDeveloperEmail=markus.spiekermann@isst.fraunhofer.de
@@ -148,8 +147,5 @@ do
   rm -rf $component/launchers
 done
 
-
-## Swap out the build file without the nexus plugin, because the nexus plugin
-## gets applied at the root project level, otherwise it will throw an error.
-mv Runtime-Metamodel/build.gradle.kts Runtime-Metamodel/build.gradle.kts.bak
-mv Runtime-Metamodel/build.gradle.kts.release Runtime-Metamodel/build.gradle.kts
+# runtime metamodel needs its libs file to get the edc-build version to be used
+cp Runtime-Metamodel/gradle/libs.versions.toml gradle

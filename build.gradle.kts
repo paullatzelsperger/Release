@@ -24,7 +24,6 @@ plugins {
 }
 
 val version: String by project
-val metaModelVersion: String by project
 val edcScmConnection: String by project
 val edcWebsiteUrl: String by project
 val edcScmUrl: String by project
@@ -63,9 +62,6 @@ allprojects {
     }
 
     configure<org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension> {
-        versions {
-            metaModel.set(metaModelVersion)
-        }
         pom {
             scmConnection.set(edcScmConnection)
             scmUrl.set(edcScmUrl)
@@ -82,14 +78,7 @@ allprojects {
     // configure which version of the annotation processor to use. defaults to the same version as the plugin
     configure<org.eclipse.edc.plugins.autodoc.AutodocExtension> {
         processorVersion.set(annotationProcessorVersion)
-        outputDirectory.set(project.buildDir)
-    }
-
-    tasks.withType<Jar> {
-        metaInf {
-            from("${rootProject.projectDir.path}/NOTICE.md")
-            from("${rootProject.projectDir.path}/LICENSE")
-        }
+        outputDirectory.set(project.layout.buildDirectory.asFile.get())
     }
 
     val signingTasks: TaskCollection<Sign> = tasks.withType()
