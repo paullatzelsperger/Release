@@ -8,6 +8,8 @@ if [ -z "${SOURCE_BRANCH}" ]; then
   SOURCE_BRANCH="main"
 fi
 
+echo "Will build version '$VERSION' off of branch '$SOURCE_BRANCH'"
+
 # removes any dash, performs toLower
 toVersionCatalogName () {
   replacement=""
